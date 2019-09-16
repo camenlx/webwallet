@@ -1,16 +1,16 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.cc = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-let monetaryunit = require('monetaryunitjs-lib');
+let audax = require('audaxjs-lib');
 let bitcoin = require('bitcoinjs-lib');
 let bigi = require('bigi');
 
 module.exports = {
-  monetaryunit,
+  audax,
   bitcoin,
   bigi
 }
 
 
-},{"bigi":6,"bitcoinjs-lib":19,"monetaryunitjs-lib":88}],2:[function(require,module,exports){
+},{"bigi":6,"bitcoinjs-lib":19,"audaxjs-lib":88}],2:[function(require,module,exports){
 // base-x encoding
 // Forked from https://github.com/cryptocoinjs/bs58
 // Originally written by Mike Hearn for BitcoinJ
@@ -3294,15 +3294,15 @@ module.exports = {
 // Dogecoin BIP32 is a proposed standard: https://bitcointalk.org/index.php?topic=409731
 
 module.exports = {
-  monetaryunit: {
-    messagePrefix: 'MonetaryUnit Signed Message:\n',
+  audax: {
+    messagePrefix: 'Audax Signed Message:\n',
     bip32: {
       public: 0x022d2533,
       private: 0x0221312b
     },
-    pubKeyHash: 0x10,
-    scriptHash: 0x4c,
-    wif: 0x7e
+    pubKeyHash: 0x17,
+    scriptHash: 0x8,
+    wif: 0x8E
   },
   bitcoin: {
     messagePrefix: '\x18Bitcoin Signed Message:\n',
@@ -9207,7 +9207,7 @@ function toBech32 (data, version, prefix) {
 }
 
 function fromOutputScript (outputScript, network) {
-  network = network || networks.monetaryunit
+  network = network || networks.audax
 
   if (btemplates.pubKeyHash.output.check(outputScript)) return toBase58Check(bscript.compile(outputScript).slice(3, 23), network.pubKeyHash)
   if (btemplates.scriptHash.output.check(outputScript)) return toBase58Check(bscript.compile(outputScript).slice(2, 22), network.scriptHash)
@@ -9218,7 +9218,7 @@ function fromOutputScript (outputScript, network) {
 }
 
 function toOutputScript (address, network) {
-  network = network || networks.monetaryunit
+  network = network || networks.audax
 
   var decode
   try {
@@ -9337,7 +9337,7 @@ function ECPair (d, Q, options) {
   }
 
   this.compressed = options.compressed === undefined ? true : options.compressed
-  this.network = options.network || NETWORKS.monetaryunit
+  this.network = options.network || NETWORKS.audax
 }
 
 Object.defineProperty(ECPair.prototype, 'Q', {
@@ -9371,9 +9371,9 @@ ECPair.fromWIF = function (string, network) {
 
     if (!network) throw new Error('Unknown network version')
 
-  // otherwise, assume a network object (or default to monetaryunit)
+  // otherwise, assume a network object (or default to audax)
   } else {
-    network = network || NETWORKS.monetaryunit
+    network = network || NETWORKS.audax
 
     if (version !== network.wif) throw new Error('Invalid network version')
   }
@@ -9562,7 +9562,7 @@ function HDNode (keyPair, chainCode) {
 
 HDNode.HIGHEST_BIT = 0x80000000
 HDNode.LENGTH = 78
-HDNode.MASTER_SECRET = Buffer.from('monetaryunit seed', 'utf8')
+HDNode.MASTER_SECRET = Buffer.from('audax seed', 'utf8')
 
 HDNode.fromSeedBuffer = function (seed, network) {
   typeforce(types.tuple(types.Buffer, types.maybe(types.Network)), arguments)
@@ -9605,9 +9605,9 @@ HDNode.fromBase58 = function (string, networks) {
 
     if (!network) throw new Error('Unknown network version')
 
-  // otherwise, assume a network object (or default to monetaaryunit)
+  // otherwise, assume a network object (or default to audax)
   } else {
-    network = networks || NETWORKS.monetaryunit
+    network = networks || NETWORKS.audax
   }
 
   if (version !== network.bip32.private &&
@@ -9742,7 +9742,7 @@ HDNode.prototype.toBase58 = function (__isPrivate) {
   return base58check.encode(buffer)
 }
 
-// https://github.com/muecoin/bips/blob/master/bip-0032.mediawiki#child-key-derivation-ckd-functions
+// https://github.com/theaudaxproject/bips/blob/master/bip-0032.mediawiki#child-key-derivation-ckd-functions
 HDNode.prototype.derive = function (index) {
   typeforce(types.UInt32, index)
 
@@ -9889,16 +9889,16 @@ module.exports = {
 
 },{"./address":80,"./block":81,"./bufferutils":82,"./crypto":83,"./ecpair":85,"./ecsignature":86,"./hdnode":87,"./networks":89,"./script":90,"./templates":92,"./transaction":114,"./transaction_builder":115,"bitcoin-ops":9}],89:[function(require,module,exports){
 module.exports = {
-  monetaryunit: {
-    messagePrefix: 'MonetaryUnit Signed Message:\n',
+  audax: {
+    messagePrefix: 'Audax Signed Message:\n',
     bech32: 'mu',
     bip32: {
       public: 0x022d2533,
       private: 0x0221312b
     },
-    pubKeyHash: 0x10,
-    scriptHash: 0x4c,
-    wif: 0x7e
+    pubKeyHash: 0x17,
+    scriptHash: 0x8,
+    wif: 0x8E
   },
   testnet: {
     messagePrefix: 'DarkNet Signed Message:\n',
@@ -10783,7 +10783,7 @@ Transaction.prototype.clone = function () {
 /**
  * Hash transaction for signing a specific input.
  *
- * monetaryunit uses a different hash for each signed transaction input.
+ * audax uses a different hash for each signed transaction input.
  * This method copies the transaction, makes the necessary changes based on the
  * hashType, and then hashes the result.
  * This hash can then be used to sign the provided transaction input.
@@ -10791,7 +10791,7 @@ Transaction.prototype.clone = function () {
 Transaction.prototype.hashForSignature = function (inIndex, prevOutScript, hashType) {
   typeforce(types.tuple(types.UInt32, types.Buffer, /* types.UInt8 */ types.Number), arguments)
 
-  // https://github.com/muecoin/MUE/blob/master/src/test/sighash_tests.cpp#L29
+  // https://github.com/theaudaxproject/audax/blob/master/src/test/sighash_tests.cpp#L29
   if (inIndex >= this.ins.length) return ONE
 
   // ignore OP_CODESEPARATOR
@@ -10814,7 +10814,7 @@ Transaction.prototype.hashForSignature = function (inIndex, prevOutScript, hashT
 
   // SIGHASH_SINGLE: ignore all outputs, except at the same index?
   } else if ((hashType & 0x1f) === Transaction.SIGHASH_SINGLE) {
-    // https://github.com/muecoin/MUE/blob/master/src/test/sighash_tests.cpp#L60
+    // https://github.com/theaudaxproject/audax/blob/master/src/test/sighash_tests.cpp#L60
     if (inIndex >= this.outs.length) return ONE
 
     // truncate outputs after
@@ -11500,7 +11500,7 @@ function buildInput (input, allowIncomplete) {
 
 function TransactionBuilder (network, maximumFeeRate) {
   this.prevTxMap = {}
-  this.network = network || networks.monetaryunit
+  this.network = network || networks.audax
 
   // WARNING: This is __NOT__ to be relied on, its just another potential safety mechanism (safety in-depth)
   this.maximumFeeRate = maximumFeeRate || 1000

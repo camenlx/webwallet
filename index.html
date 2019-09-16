@@ -1,19 +1,19 @@
 <html>
  <head>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicons/favicon.ico?a=1" type="image/x-icon">
     <meta name="theme-color" content="#f8921a">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css">
     <script src="./js/jquery-1.11.1.min.js"></script>
-    <link href="./css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="./css/bootstrap.min.css?a=4" rel="stylesheet" id="bootstrap-css">
     <script src="./js/bootstrap.min.js"></script>
     <link href="./css/styles.css" rel="stylesheet" id="styles-css">
     <script type="text/javascript" src="./js/instascan.min.js"></script>
     <script src="./js/cc.js"></script>
     <script src="./js/clipboard.min.js"></script>
     <script src="./js/cookie.js"></script>
-    <script src="./js/script.js"></script>
-    <title>MonetaryUnit - Web Wallet</title>
+    <script src="./js/script.js?a=9"></script>
+    <title>Audax - Web Wallet</title>
  </head>
 
  <body>
@@ -26,7 +26,7 @@
       <section class="form">
 	<div id="pwd-container">
         <form method="post" action="javascript:login();" role="login" style="padding-bottom: 2px;">
-          <a href="https://monetaryunit.org/" target="_blank"><img style="width: 240px;" src="./images/logo.png" class="img-responsive" alt="" /></a>
+          <a href="https://audaxproject.io/" target="_blank"><img style="width: 240px;" src="./images/logo.png" class="img-responsive" alt="" /></a>
 
             <div style="padding-bottom: 15px">
               <input id="email" type="email" name="email" placeholder="Email" required class="form-control input-lg" value="" />
@@ -38,8 +38,8 @@
 		</div>
 	      <div class="pwstrength_viewport_errors"></div>
               <div class="pwstrength_viewport_progress"></div>
-              <button id="signin" type="submit" name="go" class="btn btn-lg btn-primary btn-block">Login</button>
-	      <button id="privlogintoggle" type="button" style="font-weight: bold;" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off"">Login With Your Private Key</button>
+              <button id="signin" type="submit" name="go" class="btn btn-lg btn-primary btn-block" style = "background-color: #9932cc; border-color: #9932cc;">Login</button>
+	      <button id="privlogintoggle" type="button" style="font-weight: bold; background-color: #9932cc; border-color: #9932cc;" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off"">Login With Your Private Key</button>
             </div>
 
 	    <div id="loginprogress" style="display: none;">
@@ -52,7 +52,7 @@
 	<div id="addr-container" style="display: none;">
         <form method="post" action="javascript:spendf();" role="spend" style="padding-bottom: 2px;">
 	<div class="row" style="display: flex; justify-content: center; align-items: center;">
-          <div title="MUE" class="col-md-3 currency-logo" style="filter: drop-shadow(1px 1px 2px #4b4b4c); padding: 2px; width: 52px;"><a href="javascript:switchCoin('MUE');"><img src="./images/monetaryunit.png" class="img-responsive" alt="" /></a></div>
+          <div title="AUDAX" class="col-md-3 currency-logo" style="filter: drop-shadow(1px 1px 2px #4b4b4c); padding: 2px; width: 52px;"><a href="javascript:switchCoin('AUDAX');"><img src="./images/audax.png" class="img-responsive" alt="" /></a></div>
 	  <div title="BTC" class="col-md-3 currency-logo" style="padding: 2px; width: 53px;"><a href="javascript:switchCoin('BTC');"><img src="./images/bitcoin.png" class="img-responsive" alt="" /></a></div>
 	  <div title="LTC" class="col-md-3 currency-logo" style="padding: 2px; width: 52px;"><a href="javascript:switchCoin('LTC');"><img src="./images/litecoin.png" class="img-responsive" alt="" /></a></div>
 	  <div title="DOGE" class="col-md-3 currency-logo" style="padding: 2px; width: 53px;"><a href="javascript:switchCoin('DOGE');"><img src="./images/dogecoin.png" class="img-responsive" alt="" /></a></div>
@@ -65,7 +65,7 @@
 			<i class="fa fa-copy"></i>
 		</button>
                 <div style="margin-top: 2px;">
-		  <a href="javascript:togglePrice();" class="label hvr-buzz-out label-primary" id="addr-balance" style="vertical-align: middle; font-size: 11.8px; padding: 4.3px;">Balance: 0.00000000 MUE</a>
+		  <a href="javascript:togglePrice();" class="label hvr-buzz-out label-primary" id="addr-balance" style="vertical-align: middle; font-size: 11.8px; padding: 4.3px;">Balance: 0.00000000 AUDAX</a>
                 <button id="addr-balance-refresh" type="button" class="btn btn-primary refresh" onclick="javascript:loadAddress();">
 			<i class="fa fa-bolt" style="width: 14px;"></i>
 		</button>
@@ -78,9 +78,9 @@
                 <button id="trx-fee" type="button" class="btn btn-primary customfee" onclick="changeTheFee();">
                         <i class="fa fa-wrench" style="width: 14px;"></i>
                 </button>
-                <button id="trx-donation" type="button" class="btn btn-primary donation" onclick="donate();">
+                <!--<button id="trx-donation" type="button" class="btn btn-primary donation" onclick="donate();">
                         <i class="fa fa-donate" style="width: 14px;"></i>
-                </button>
+                </button>-->
 		</div>
 	      </div>
 

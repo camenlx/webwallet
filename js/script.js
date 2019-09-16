@@ -1,23 +1,24 @@
-var CURRENT_COIN = 'MUE';
+var CURRENT_COIN = 'AUDAX';
 var PARAMS = {
-	'MUE': {
-		coingecko: 'monetaryunit',
+	'AUDAX': {
+		coingecko: 'audax',
 		coinjs: cc.bitcoin,
-		network: cc.bitcoin.networks.monetaryunit,
-		qrColor: 'F8931A',
+		network: cc.bitcoin.networks.audax,
+		qrColor: '9932CC',
 		minFee: 0.002,
 		maxFee: 0.2,
 		txFee: 0.002,
-		explorer: 'https://blockbook.monetaryunit.org/',
-		donation: '7qhVjgsbJWo1RRE7TNqyT4NWFAHBEKs8zL',
-		unspentApi: 'https://apps.mymue.com/wwapi/addrs/',
-		sendApi: 'https://apps.mymue.com/wwapi/broadcast/',
+		explorer: 'https://explorer.audaxproject.io/',
+		donation: 'AMyJheYKFREkCVsjDMzWTwYtiCPR3d87GT',
+		unspentApi: 'https://api.audaxproject.io/utils/unspent.php?address=',
+		sendApi: 'https://api.audaxproject.io/utils/pushtx.php',
 		sendTxHex: 'data',
 		sendTxid1: 'txid',
 		unspentTxid: 'txid',
 		unspentOutput: 'output',
 		unspentValue: 'value',
-		unspentDivision: 1
+        unspentDivision: 1,
+        shortName: 'AUDAX'
 	},
 
         'BTC': {
@@ -172,7 +173,7 @@ var loginPrivkey="";
 var keyPair="";
 function hashit(hash, callback) {
   for(i=0; i<100*1440; i++) {
-    hash = cc.monetaryunit.crypto.keccak256(hash+passphrase);
+    hash = cc.audax.crypto.keccak256(hash+passphrase);
     hash = hash.toString("hex");
   }
 
@@ -234,7 +235,7 @@ function login() {
 
   // Login with email + password
   passphrase = $("#email").val() + ";" + $("#password").val();
-  var hash = cc.monetaryunit.crypto.keccak256(passphrase);
+  var hash = cc.audax.crypto.keccak256(passphrase);
   $('#email').prop("disabled", true);
   $('#password').prop("disabled", true);
   $('#signin').prop("disabled", true);
@@ -265,7 +266,7 @@ function loadAddress() {
 
 function refresh() {
   $.ajax({
-    url: PARAMS[CURRENT_COIN].unspentApi + keyPair.getAddress() + '?unspentOnly=true',
+    url: PARAMS[CURRENT_COIN].unspentApi + keyPair.getAddress() + '&unspentOnly=true',
     type: "GET",
     dataType: "json",
     data: {
@@ -299,7 +300,7 @@ function loadAddressTxes(result) {
   } else { utxos=result; }
 
   for(i in utxos) {
-    sum += Number(utxos[i][PARAMS[CURRENT_COIN].unspentValue]/PARAMS[CURRENT_COIN].unspentDivision);
+    sum += Number(utxos[i][PARAMS[CURRENT_COIN].unspentValue]/PARAMS[CURRENT_COIN].unspentDivision);    
   } balance = sum;
 
   USD = false;
@@ -411,7 +412,7 @@ var tx;
 function spendf() {
   var amount = Number($("#amount").val());
   const FEE = PARAMS[CURRENT_COIN].txFee + donation;
-  if(balance < FEE || MUE(amount+FEE) > balance) { alert("Insufficient funds! Minimum network fee is " + FEE + " " + CURRENT_COIN + "."); return; }
+  if(balance < FEE || AUDAX(amount+FEE) > balance) { alert("Insufficient funds! Minimum network fee is " + FEE + " " + CURRENT_COIN + "."); return; }
 
   // Validate the address
   try {
@@ -436,7 +437,7 @@ function spendf() {
   tx.addOutput($("#address").val(), Math.ceil(amount*100000000));
 
   // Add the change (if any)
-  var change = MUE(balance - amount - FEE);
+  var change = AUDAX(balance - amount - FEE);
   if(change > 0) {
     tx.addOutput(changeAddress, Math.ceil(change*100000000));
   }
@@ -457,43 +458,54 @@ function spendf() {
     dataType: "json",
     data: PARAMS[CURRENT_COIN].sendTxHex+"=" + tx.build().toHex(),
     success: function (result) {
-	var T1 = PARAMS[CURRENT_COIN].sendTxid1;
-	var T2 = PARAMS[CURRENT_COIN].sendTxid2;
-	var txid = '';
 
-	if(T1 && T2 && result && result[T1]) txid = result[T1][T2];
-	else if(T1 && result) txid = result[T1];
+        var T1 = PARAMS[CURRENT_COIN].sendTxid1;
+        var T2 = PARAMS[CURRENT_COIN].sendTxid2;
+        var txid = '';
 
-	if (txid && (typeof txid === 'string' || txid instanceof String)) {
-	   balance = change;
-	   $('#addr-balance').html("Balance: " + balance.toFixed(8) + " " + CURRENT_COIN);
-	   USD = false;
-	   usdBalance = false;
-	   if(change > 0 && ( changeAddress == keyPair.getAddress() )) {
-		var p1 = PARAMS[CURRENT_COIN].unspentTxid;
-		var p2 = PARAMS[CURRENT_COIN].unspentOutput;
-		var p3 = PARAMS[CURRENT_COIN].unspentValue;
-		utxos = [{[p1]: txid, [p2]: 1, [p3]: change*PARAMS[CURRENT_COIN].unspentDivision}];
-	   } else { utxos = []; }
+        if(T1 && T2 && result && result[T1]) txid = result[T1][T2];
+        else if(T1 && result) txid = result[T1];
 
-	   window.open(PARAMS[CURRENT_COIN].explorer + "tx/" + txid);
-	} else {
-	   console.log(result);
-	   alert("Broadcast failed! Check console for the details!");
-	}
+        if (txid && (typeof txid === 'string' || txid instanceof String)) {
+            balance = change;
+            $('#addr-balance').html("Balance: " + balance.toFixed(8) + " " + CURRENT_COIN);
+            USD = false;
+            usdBalance = false;
+            if(change > 0 && ( changeAddress == keyPair.getAddress() )) {
+                var p1 = PARAMS[CURRENT_COIN].unspentTxid;
+                var p2 = PARAMS[CURRENT_COIN].unspentOutput;
+                var p3 = PARAMS[CURRENT_COIN].unspentValue;
+                utxos = [{[p1]: txid, [p2]: 1, [p3]: change*PARAMS[CURRENT_COIN].unspentDivision}];
+            } else { utxos = []; }
 
-	$('#address').prop("disabled", false).val("");
-	$('#amount').prop("disabled", false).val("");
-	$('#send').prop("disabled", false).html("Send");
-	$('#sendprogress').hide();
+            window.open(PARAMS[CURRENT_COIN].explorer + "tx/" + txid);
+        } else {
+            console.log(result);
+            alert("Broadcast failed! Check console for the details!");
+        }
+
+        $('#address').prop("disabled", false).val("");
+        $('#amount').prop("disabled", false).val("");
+        $('#send').prop("disabled", false).html("Send");
+        $('#sendprogress').hide();
     },
     error: function (error) {
         $('#address').prop("disabled", false).val("");
         $('#amount').prop("disabled", false).val("");
         $('#send').prop("disabled", false).html("Send");
         $('#sendprogress').hide();
+
+        if(PARAMS[CURRENT_COIN].coingecko == 'audax' && (error.responseText).substr(0,13) == "resultsuccess"){
+            balance = change;
+           $('#addr-balance').html("Balance: " + balance.toFixed(8) + " " + CURRENT_COIN);
+           USD = false;
+           usdBalance = false;
+           window.open(PARAMS[CURRENT_COIN].explorer + "tx/" + (error.responseText).substr((error.responseText).length - 64));
+        }else{
+
 	alert("Broadcast failed! Check console for the details!");
         console.log(error);
+    }
     }
   });
 }
@@ -518,7 +530,7 @@ function enableSendForm() {
   $('#send').prop("disabled", false).html("Send");
 }
 
-function MUE(a) {
+function AUDAX(a) {
   return Number(a.toFixed(8));
 }
 
@@ -529,14 +541,14 @@ function accept() {
 function copyWholeBalance() {
   const FEE = PARAMS[CURRENT_COIN].txFee + donation;
   if(balance - FEE > 0) {
-     $('#amount').val(MUE(balance - FEE));
+     $('#amount').val(AUDAX(balance - FEE));
   }
 }
 
 jQuery(document).ready(function() {
   // PWA Service Worker
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('../service-worker.js').catch(function(err) {
+    navigator.serviceWorker.register('service-worker.js').catch(function(err) {
       console.log(err);
     });
   }
