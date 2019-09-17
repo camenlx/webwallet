@@ -10,7 +10,7 @@ var PARAMS = {
 		txFee: 0.002,
 		explorer: 'https://explorer.audaxproject.io/',
 		donation: 'AMyJheYKFREkCVsjDMzWTwYtiCPR3d87GT',
-		unspentApi: 'https://api.audaxproject.io/utils/unspent.php?address=',
+		unspentApi: 'https://api.audaxproject.io/utils/unspent/',
 		sendApi: 'https://api.audaxproject.io/utils/pushtx.php',
 		sendTxHex: 'data',
 		sendTxid1: 'txid',
